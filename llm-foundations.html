@@ -111,11 +111,20 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
 .embed-example-btn:hover{background:var(--bg-inset)}
 .embed-example-btn[aria-pressed="true"]{background:var(--text-primary);color:var(--text-on-accent);border-color:var(--text-primary)}
 /* Attention */
-.attention-sentence{display:flex;flex-wrap:wrap;gap:0;justify-content:center;padding:var(--space-lg) 0;position:relative}
+.attention-sentence{display:flex;flex-wrap:wrap;gap:0;justify-content:center;padding:var(--space-lg) 0 var(--space-xs);position:relative}
 .attention-word{font-family:var(--font-heading);font-size:1.35rem;padding:7px 5px;cursor:pointer;transition:color 0.2s,background 0.2s;border-radius:var(--radius-sm);position:relative;z-index:2}
 .attention-word:hover,.attention-word[aria-selected="true"]{background:var(--color-s3-light);color:var(--color-s3)}
 .attention-svg{width:100%;height:80px;display:block}
 .attention-line{stroke:var(--color-s3);fill:none;transition:opacity 0.25s var(--ease)}
+.attention-word.masked{opacity:0.3}
+.attention-word.masked:hover{opacity:0.6}
+.position-demo{display:flex;flex-direction:column;gap:var(--space-sm);padding:var(--space-md);background:var(--bg-inset);border:1px solid var(--border-color);border-radius:var(--radius-md);margin-bottom:var(--space-md)}
+.position-row{display:flex;align-items:flex-start;gap:var(--space-sm);flex-wrap:wrap}
+.position-row+.position-row{border-top:1px solid var(--border-color);padding-top:var(--space-sm)}
+.position-token{display:inline-flex;flex-direction:column;align-items:center;gap:2px}
+.position-token .pos-word{font-family:var(--font-mono);font-size:0.85rem;font-weight:500;padding:4px 10px;border-radius:var(--radius-sm);border:1px solid transparent}
+.position-token .pos-num{font-family:var(--font-mono);font-size:0.68rem;color:var(--text-muted)}
+.position-meaning{font-size:0.82rem;color:var(--text-secondary);align-self:center;margin-left:var(--space-sm)}
 .attention-info{text-align:center;font-size:0.88rem;color:var(--text-muted);min-height:1.6em;margin-top:var(--space-sm)}
 /* Bridge */
 .bridge-svg{width:100%;display:block}
@@ -175,11 +184,11 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
     <span class="pipeline-arrow" aria-hidden="true">→</span>
     <a href="#sec-s3" class="pipeline-step" style="background:var(--color-s3-light);color:var(--color-s3)"><span class="step-num" style="background:var(--color-s3)">3</span> Attend</a>
     <span class="pipeline-arrow" aria-hidden="true">→</span>
-    <a href="#sec-s45" class="pipeline-step" style="background:var(--color-s45-light);color:var(--color-s45)"><span class="step-num" style="background:var(--color-s45)">4–5</span> Predict</a>
+    <a href="#sec-s45" class="pipeline-step" style="background:var(--color-s45-light);color:var(--color-s45)"><span class="step-num" style="background:var(--color-s45)">4</span> Predict</a>
     <span class="pipeline-arrow" aria-hidden="true">→</span>
-    <a href="#sec-s6" class="pipeline-step" style="background:var(--color-s6-light);color:var(--color-s6)"><span class="step-num" style="background:var(--color-s6)">6</span> Sample</a>
+    <a href="#sec-s6" class="pipeline-step" style="background:var(--color-s6-light);color:var(--color-s6)"><span class="step-num" style="background:var(--color-s6)">5</span> Sample</a>
     <span class="pipeline-arrow" aria-hidden="true">→</span>
-    <a href="#sec-s78" class="pipeline-step" style="background:var(--color-s78-light);color:var(--color-s78)"><span class="step-num" style="background:var(--color-s78)">7–8</span> Output</a>
+    <a href="#sec-s78" class="pipeline-step" style="background:var(--color-s78-light);color:var(--color-s78)"><span class="step-num" style="background:var(--color-s78)">6</span> Output</a>
   </nav>
 </header>
 
@@ -195,7 +204,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
     <textarea id="token-input" rows="2" aria-label="Enter text to tokenize" style="margin-top:var(--space-sm)">The capital of France is Paris</textarea>
     <div class="token-display" id="token-output" role="region" aria-live="polite" aria-label="Tokenization result"><span style="color:var(--text-muted);font-style:italic">Loading tokenizer…</span></div>
     <div class="stat-row" id="token-stats" aria-live="polite"></div>
-    <p style="margin-top:var(--space-md);font-size:0.82rem;color:var(--text-muted)" id="tokenizer-status">Loading the <code>cl100k_base</code> tokenizer (used by GPT-4). Compare with <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">OpenAI's Tokenizer</a>.</p>
+    <p style="margin-top:var(--space-md);font-size:0.82rem;color:var(--text-muted)" id="tokenizer-status">Loading the <code>cl100k_base</code> tokenizer (used by GPT-4 and GPT-3.5 Turbo). Compare with <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">OpenAI's Tokenizer</a>.</p>
   </div>
 </section>
 <div class="flow-connector" aria-hidden="true">↓</div>
@@ -210,7 +219,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
     <div class="embed-legend" id="embed-legend"></div>
     <div class="embed-canvas" id="embed-canvas">
       <svg id="embed-conn-svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5"></svg>
-      <div style="position:absolute;bottom:6px;right:10px;font-size:0.65rem;color:var(--text-muted);background:rgba(245,242,237,0.85);padding:2px 6px;border-radius:var(--radius-sm)">2D projection of 512+ dimensions</div>
+      <div style="position:absolute;bottom:6px;right:10px;font-size:0.65rem;color:var(--text-muted);background:rgba(245,242,237,0.85);padding:2px 6px;border-radius:var(--radius-sm)">Illustrative 2D layout. Real embeddings have thousands of dimensions.</div>
     </div>
     <!-- Inline hover panel + insight combined -->
     <div class="embed-hover-inline" id="embed-hover-panel" aria-live="polite">
@@ -223,6 +232,31 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
     </div>
     <p id="embed-insight-text" style="margin-top:var(--space-md);font-size:0.88rem;color:var(--text-secondary);line-height:1.55;padding:var(--space-md);background:var(--bg-inset);border-radius:var(--radius-md)"></p>
     <p style="margin-top:var(--space-sm);font-size:0.78rem;color:var(--text-muted)">Hover over any word to see what's nearby. Dark labels = tokens from the sentence. Colored labels = related words the model learned sit nearby.</p>
+
+    <!-- Position information -->
+    <div style="margin-top:var(--space-xl);border-top:1px solid var(--border-color);padding-top:var(--space-lg)">
+      <h3 style="margin-bottom:var(--space-sm)">Adding word order</h3>
+      <p class="explain-text">Attention (Step 3) compares tokens with each other but has no built-in sense of order. Without extra information, "The dog bites the man" and "The man bites the dog" would look identical to it: same five tokens, same embeddings. So the model also injects <strong>position information</strong>, which lets attention tell tokens apart by where they appear.</p>
+      <div class="position-demo" role="img" aria-label="The same five tokens in two orders. With dog at position 1 and man at position 4, the dog does the biting. Swapping their positions makes the man do the biting.">
+        <div class="position-row">
+          <span class="position-token"><span class="pos-word" style="background:#f5f2ed;color:#7a756e;border-color:#7a756e30">The</span><span class="pos-num">pos 0</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#e9f1f8;color:#1e6091;border-color:#1e609130">␣dog</span><span class="pos-num">pos 1</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#ebf5f0;color:#2e7048;border-color:#2e704830">␣bites</span><span class="pos-num">pos 2</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#f5f2ed;color:#7a756e;border-color:#7a756e30">␣the</span><span class="pos-num">pos 3</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#fdf0eb;color:#b8462a;border-color:#b8462a30">␣man</span><span class="pos-num">pos 4</span></span>
+          <span class="position-meaning">The dog did the biting.</span>
+        </div>
+        <div class="position-row">
+          <span class="position-token"><span class="pos-word" style="background:#f5f2ed;color:#7a756e;border-color:#7a756e30">The</span><span class="pos-num">pos 0</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#fdf0eb;color:#b8462a;border-color:#b8462a30">␣man</span><span class="pos-num">pos 1</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#ebf5f0;color:#2e7048;border-color:#2e704830">␣bites</span><span class="pos-num">pos 2</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#f5f2ed;color:#7a756e;border-color:#7a756e30">␣the</span><span class="pos-num">pos 3</span></span>
+          <span class="position-token"><span class="pos-word" style="background:#e9f1f8;color:#1e6091;border-color:#1e609130">␣dog</span><span class="pos-num">pos 4</span></span>
+          <span class="position-meaning">The man did the biting.</span>
+        </div>
+      </div>
+      <p class="explain-text" style="margin-bottom:0">The original Transformer (Vaswani et al., 2017) added a fixed pattern of sine and cosine waves to each embedding. Most current LLMs use <strong>rotary position embeddings (RoPE)</strong>, which encode position inside the attention calculation itself. Either way, attention can tell where each token sits in the sequence.</p>
+    </div>
   </div>
 </section>
 <div class="flow-connector" aria-hidden="true">↓</div>
@@ -231,21 +265,22 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
 <section class="viz-section" id="sec-s3" aria-labelledby="h-s3">
   <div class="section-badge" style="background:var(--color-s3-light);color:var(--color-s3)"><span class="num" style="background:var(--color-s3)">3</span> Attention</div>
   <h2 id="h-s3">The model reads context through attention</h2>
-  <p class="section-intro">The model examines all tokens at once and calculates how each one relates to every other one. This is called <strong>attention</strong> — each token "pays attention to" (or "attends to") the other tokens to understand their relationships. This happens across many <strong>transformer layers</strong> — think of them as repeated rounds of processing, each one refining the model's understanding. Early layers capture grammar and word proximity; later layers capture intent, topic, and meaning.</p>
+  <p class="section-intro">Each token compares itself with the tokens that came before it and calculates how relevant each one is. This is called <strong>attention</strong>. In chat models attention is <strong>causal</strong>: a token can look back at earlier tokens but never ahead, because during generation the later tokens don't exist yet. Each <strong>transformer layer</strong> pairs attention with a <strong>feed-forward network</strong> that further transforms every token's vector, and models stack dozens of these layers. Research suggests earlier layers tend to capture local and grammatical patterns while later layers capture broader meaning, though the division is not clean.</p>
 
   <div class="interact-card">
-    <p class="explain-text" style="margin-bottom:var(--space-sm)">Hover or click any word to see which other words it <strong>attends to</strong> (pays attention to) and how strongly. Line thickness shows the strength of the connection.</p>
+    <p class="explain-text" style="margin-bottom:var(--space-sm)">Hover or click any word to see which earlier words it <strong>attends to</strong> and how strongly. Line thickness shows the strength of the connection. Faded words come later in the sentence, so they are masked and receive no attention.</p>
     <div id="attention-container">
       <div class="attention-sentence" id="attention-words" role="group" aria-label="Interactive sentence — hover or click words to see attention weights"></div>
       <svg class="attention-svg" id="attention-svg" aria-hidden="true"></svg>
     </div>
     <p class="attention-info" id="attention-info" aria-live="polite">Select a word above to see its attention pattern.</p>
+    <p class="explain-text" style="margin-top:var(--space-md);margin-bottom:0;font-size:0.82rem">This shows one <strong>attention head</strong> with illustrative weights. Each layer runs many heads in parallel (the original Transformer used 8 per layer), and each head learns to track a different relationship, such as which noun a pronoun refers to or which verb a word belongs to.</p>
 
     <!-- Bridge: how attention reshapes meaning -->
     <div style="margin-top:var(--space-xl);border-top:1px solid var(--border-color);padding-top:var(--space-lg)">
-      <h3 style="margin-bottom:var(--space-sm)">How attention reshapes meaning across layers</h3>
-      <p class="explain-text">Attention doesn't just read context — it <strong>moves each token's vector</strong> based on what it attended to. Below, both instances of "bank" start at the <em>same position</em> (because they're the same word). Click through the transformer layers to watch how context pulls each "bank" toward different meanings.</p>
-      <p class="explain-text" id="bridge-explanation" aria-live="polite"><strong>Input embeddings:</strong> Both "bank" tokens start at the exact same position — the model hasn't processed any context yet.</p>
+      <h3 style="margin-bottom:var(--space-sm)">How layers reshape meaning</h3>
+      <p class="explain-text">Each layer <strong>updates every token's vector</strong>: attention mixes in information from earlier tokens, and the feed-forward network transforms the result. Below, both instances of "bank" start from the <em>same embedding</em> because they are the same token. Click through the layers to watch context pull each "bank" toward a different meaning.</p>
+      <p class="explain-text" id="bridge-explanation" aria-live="polite"><strong>Input embeddings:</strong> Both "bank" tokens start from the same embedding. No context has been processed yet.</p>
       <div style="position:relative;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden">
         <svg class="bridge-svg" id="bridge-svg" viewBox="0 0 700 340" role="img" aria-label="Animated visualization showing how word vectors shift positions across transformer layers"></svg>
       </div>
@@ -263,7 +298,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
         <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#c05d3b;display:inline-block"></span> "bank" (ambiguous)</span>
         <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#7a756e;display:inline-block"></span> Function words</span>
       </div>
-      <p class="explain-text" style="margin-top:var(--space-md)"><em>Sentence: "She sat by the river <strong>bank</strong> and checked her <strong>bank</strong> account."</em> — Dashed lines show the path each word's vector has traveled from its starting position.</p>
+      <p class="explain-text" style="margin-top:var(--space-md)"><em>Sentence: "She sat by the river <strong>bank</strong>, then deposited cash at the <strong>bank</strong>."</em> Each "bank" can only draw on the words before it, so the finance words come before the second "bank." Dashed lines show the path each vector has traveled. Positions are illustrative, and production models use many more layers.</p>
     </div>
   </div>
 </section>
@@ -273,7 +308,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
 <section class="viz-section" id="sec-constraint" aria-labelledby="h-constraint">
   <div class="section-badge" style="background:var(--color-constraint-light);color:var(--color-constraint)"><span class="num" style="background:var(--color-constraint)">⚠</span> Constraint</div>
   <h2 id="h-constraint">The context window limits what the model can see</h2>
-  <p class="section-intro">Steps 1–3 all happen within a fixed-size <strong>context window</strong> — the maximum number of tokens the model can process at once. Everything outside this window is invisible. This is a fundamental constraint that shapes what the model can understand and respond to.</p>
+  <p class="section-intro">The <strong>context window</strong> is the maximum number of tokens the model can process at once. It covers your prompt, any earlier conversation, and the response being generated. Anything outside the window is invisible to the model, which limits what it can understand and respond to.</p>
   <div class="interact-card">
     <div style="display:flex;align-items:center;gap:var(--space-lg);flex-wrap:wrap;margin-bottom:var(--space-sm)">
       <div>
@@ -288,6 +323,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
       </div>
       <div class="stat-row" id="context-stats" style="margin-top:0"></div>
     </div>
+    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:var(--space-sm)">Window sizes are scaled down to fit this short passage, and each word counts as one token for simplicity. Current models handle 128,000 tokens or more, and some exceed 1 million.</p>
     <p id="context-explanation" style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:var(--space-md)" aria-live="polite"></p>
     <div class="context-viewport" id="context-viewport" role="region" aria-label="Text with context window highlighted">
       <div class="context-text" id="context-text"></div>
@@ -296,18 +332,19 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
 </section>
 <div class="flow-connector" aria-hidden="true">↓</div>
 
-<!-- ═══ STEPS 4–5: PREDICTION & COHERENCE ═══ -->
+<!-- ═══ STEP 4: PREDICTION & COHERENCE ═══ -->
 <section class="explainer-section" id="sec-s45" aria-labelledby="h-s45">
-  <div class="section-badge" style="background:var(--color-s45-light);color:var(--color-s45)"><span class="num" style="background:var(--color-s45)">4–5</span> Predict & Repeat</div>
+  <div class="section-badge" style="background:var(--color-s45-light);color:var(--color-s45)"><span class="num" style="background:var(--color-s45)">4</span> Predict & Repeat</div>
   <h2 id="h-s45">Next-token prediction and the coherence loop</h2>
-  <p class="section-intro">After attention has built context-aware representations of every token, the model uses them to predict what comes next — one token at a time.</p>
+  <p class="section-intro">After the transformer layers have built context-aware representations, the model uses them to predict what comes next, one token at a time.</p>
   <div class="interact-card" style="background:var(--bg-inset);border:none;padding:var(--space-lg)">
-    <h3 style="margin-bottom:var(--space-sm)">Step 4: Next-token prediction</h3>
-    <p class="explain-text">Using the context-aware representations from Step 3, the model generates a <strong>probability score for every token in its vocabulary</strong> (~100,000 possibilities). It selects one (more on how in Step 6), appends it to the sequence, and repeats. Steps 3 and 4 run again — the model reprocesses the <em>entire</em> sequence each time to predict the next token. The response is built one token at a time, left to right.</p>
+    <h3 style="margin-bottom:var(--space-sm)">Next-token prediction</h3>
+    <p class="explain-text">The model takes the vector at the <strong>last position</strong> and passes it through a final layer that produces a score for every token in its vocabulary (about 100,000 for <code>cl100k_base</code>). A <strong>softmax</strong> function turns those scores into probabilities. The model picks one token (see Step 5), appends it to the sequence, and runs again. The response is built one token at a time, left to right.</p>
+    <p class="explain-text">Each new token attends to the entire sequence so far, but the model doesn't recompute everything from scratch. It stores the attention keys and values of earlier tokens in a <strong>KV cache</strong>, so each step only processes the newest token.</p>
 
     <!-- Inline diagram: the loop -->
     <div class="inline-diagram">
-      <svg viewBox="0 0 600 160" style="max-width:100%;height:auto" role="img" aria-label="Diagram showing the generation loop: prompt goes through attention, produces probability distribution, selects next token, which feeds back into the sequence">
+      <svg viewBox="0 0 600 160" style="max-width:100%;height:auto" role="img" aria-label="Diagram showing the generation loop: the sequence goes through the transformer layers, the model predicts and picks the next token, and the new token is appended to the sequence">
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7a756e"/></marker>
         </defs>
@@ -316,11 +353,11 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
         <text x="70" y="78" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="600" fill="var(--text-primary)">Full sequence</text>
         <text x="70" y="93" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--text-muted)">prompt + generated so far</text>
         <rect x="190" y="55" width="100" height="50" rx="6" fill="var(--color-s3-light)" stroke="var(--color-s3)" stroke-width="1.5"/>
-        <text x="240" y="78" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="600" fill="var(--color-s3)">Attention</text>
+        <text x="240" y="78" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="600" fill="var(--color-s3)">Transformer</text>
         <text x="240" y="93" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--text-muted)">Steps 2–3</text>
         <rect x="350" y="55" width="100" height="50" rx="6" fill="var(--color-s6-light)" stroke="var(--color-s6)" stroke-width="1.5"/>
-        <text x="400" y="78" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="600" fill="var(--color-s6)">Pick next</text>
-        <text x="400" y="93" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--text-muted)">Step 6</text>
+        <text x="400" y="78" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="600" fill="var(--color-s6)">Predict + pick</text>
+        <text x="400" y="93" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--text-muted)">Steps 4–5</text>
         <rect x="500" y="55" width="80" height="50" rx="6" fill="var(--color-s1-light)" stroke="var(--color-s1)" stroke-width="1.5"/>
         <text x="540" y="78" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="600" fill="var(--color-s1)">New token</text>
         <!-- Arrows -->
@@ -333,16 +370,19 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
       </svg>
     </div>
 
-    <h3 style="margin-top:var(--space-lg);margin-bottom:var(--space-sm)">Step 5: Coherence through the loop</h3>
-    <p class="explain-text">There is no separate quality-check or editorial step. Coherence emerges because <strong>each prediction is based on the entire sequence so far</strong> — the original prompt plus every token generated up to that point. The model stays on topic not by reviewing its work, but because the full context steers each prediction.</p>
-    <p class="explain-text" style="margin-bottom:0">Think of it like writing a sentence word by word: each word you choose is influenced by everything you've already written. The model does the same thing, but statistically across billions of learned patterns.</p>
+    <h3 style="margin-top:var(--space-lg);margin-bottom:var(--space-sm)">Coherence through the loop</h3>
+    <p class="explain-text">There is no separate editing pass during generation. Coherence comes from <strong>conditioning each prediction on the entire sequence so far</strong>: the prompt plus every token generated up to that point. Think of writing a sentence word by word, where each word you choose is shaped by everything you've already written.</p>
+    <p class="explain-text">Some newer models generate reasoning text before their final answer. This lets them work through a problem step by step, but it uses the same token-by-token loop.</p>
+
+    <h3 style="margin-top:var(--space-lg);margin-bottom:var(--space-sm)">Where the predictions come from</h3>
+    <p class="explain-text" style="margin-bottom:0">Every vector, attention pattern, and probability in this guide comes from the model's learned <strong>weights</strong>. In <strong>pretraining</strong>, the model adjusts those weights by predicting the next token across a very large body of text. In <strong>fine-tuning</strong>, including instruction tuning and reinforcement learning from human feedback (RLHF), it learns to follow instructions and respond helpfully. During generation the weights stay fixed. The model uses your conversation as context but does not update its weights from it.</p>
   </div>
 </section>
 <div class="flow-connector" aria-hidden="true">↓</div>
 
-<!-- ═══ STEP 6: SAMPLING ═══ -->
+<!-- ═══ STEP 5: SAMPLING ═══ -->
 <section class="viz-section" id="sec-s6" aria-labelledby="h-s6">
-  <div class="section-badge" style="background:var(--color-s6-light);color:var(--color-s6)"><span class="num" style="background:var(--color-s6)">6</span> Sampling</div>
+  <div class="section-badge" style="background:var(--color-s6-light);color:var(--color-s6)"><span class="num" style="background:var(--color-s6)">5</span> Sampling</div>
   <h2 id="h-s6">How the model chooses the next token</h2>
   <p class="section-intro">The model doesn't always select the highest-probability token. Three controls shape the selection: <strong>temperature</strong>, <strong>Top-K</strong>, and <strong>Top-P</strong>. This is why the same prompt can yield slightly different responses each time.</p>
   <div class="interact-card">
@@ -352,7 +392,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
     <div class="sampling-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-lg)">
       <div style="padding:var(--space-md);background:var(--bg-inset);border-radius:var(--radius-md)">
         <div style="font-weight:600;font-size:0.88rem;color:var(--color-s6);margin-bottom:4px">Temperature</div>
-        <p style="font-size:0.78rem;color:var(--text-secondary);line-height:1.5"><strong>Reshapes the distribution.</strong> Low values sharpen it (confident, repetitive). High values flatten it (creative, chaotic). Acts on <em>all</em> tokens.</p>
+        <p style="font-size:0.78rem;color:var(--text-secondary);line-height:1.5"><strong>Reshapes the distribution.</strong> Low values sharpen it (confident, repetitive). High values flatten it (creative, chaotic). Acts on <em>all</em> tokens. Near 0 it becomes <strong>greedy decoding</strong>: always the top token.</p>
       </div>
       <div style="padding:var(--space-md);background:var(--bg-inset);border-radius:var(--radius-md)">
         <div style="font-weight:600;font-size:0.88rem;color:var(--color-s6);margin-bottom:4px">Top-K</div>
@@ -364,6 +404,7 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
       </div>
     </div>
 
+    <p class="explain-text">The controls apply in order: temperature first, then Top-K, then Top-P. The remaining probabilities are then rescaled to add up to 100%.</p>
     <div class="control-row" style="gap:var(--space-lg)">
       <div class="control-group"><label for="temp-slider">Temperature</label><div style="display:flex;align-items:center;gap:var(--space-sm)"><input type="range" id="temp-slider" min="0.1" max="2.0" step="0.1" value="1.0"><span class="slider-value" id="temp-value">1.0</span></div></div>
       <div class="control-group"><label for="topk-slider">Top-K</label><div style="display:flex;align-items:center;gap:var(--space-sm)"><input type="range" id="topk-slider" min="1" max="10" step="1" value="10"><span class="slider-value" id="topk-value">10</span></div></div>
@@ -384,20 +425,20 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
 </section>
 <div class="flow-connector" aria-hidden="true">↓</div>
 
-<!-- ═══ STEPS 7–8: DETOKENIZATION & OUTPUT ═══ -->
+<!-- ═══ STEP 6: DETOKENIZATION & OUTPUT ═══ -->
 <section class="explainer-section" id="sec-s78" aria-labelledby="h-s78">
-  <div class="section-badge" style="background:var(--color-s78-light);color:var(--color-s78)"><span class="num" style="background:var(--color-s78)">7–8</span> Output</div>
+  <div class="section-badge" style="background:var(--color-s78-light);color:var(--color-s78)"><span class="num" style="background:var(--color-s78)">6</span> Output</div>
   <h2 id="h-s78">Detokenization and delivery</h2>
-  <p class="section-intro">The model's internal work is done. Now the numbers need to become words on your screen.</p>
+  <p class="section-intro">Each generated token is still a number. It needs to become text on your screen.</p>
   <div class="interact-card" style="background:var(--bg-inset);border:none;padding:var(--space-lg)">
-    <h3 style="margin-bottom:var(--space-sm)">Step 7: Detokenization</h3>
-    <p class="explain-text">Each generated token is still a number. The model reverses the lookup table from Step 1, converting token IDs back into text fragments and reassembling subword pieces into complete words. For example, token IDs <code>[30729, 38, 11571]</code> become the fragments <code>["Chat", "G", "PT"]</code>, which are joined to produce <code>"ChatGPT"</code>.</p>
+    <h3 style="margin-bottom:var(--space-sm)">Detokenization</h3>
+    <p class="explain-text">The <strong>tokenizer</strong>, a separate component from the neural network, reverses the lookup from Step 1. It converts token IDs back into text fragments and joins them. For example, token IDs <code>[16047, 38, 2898]</code> become <code>["Chat", "G", "PT"]</code>, which join to form <code>"ChatGPT"</code>. Some tokens hold only part of a character (common with emoji and non-Latin scripts), so that character appears once all of its pieces have arrived.</p>
 
     <div class="inline-diagram" style="padding:var(--space-md)">
       <svg viewBox="0 0 550 80" style="max-width:100%;height:auto" role="img" aria-label="Diagram showing token IDs being converted back to text fragments and then joined into words">
         <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7a756e"/></marker></defs>
         <rect x="10" y="20" width="140" height="40" rx="6" fill="var(--bg-card)" stroke="var(--border-color)" stroke-width="1.5"/>
-        <text x="80" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--text-primary)">[30729, 38, 11571]</text>
+        <text x="80" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--text-primary)">[16047, 38, 2898]</text>
         <line x1="150" y1="40" x2="195" y2="40" stroke="#7a756e" stroke-width="1.5" marker-end="url(#arr2)"/>
         <text x="173" y="30" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--text-muted)">lookup</text>
         <rect x="197" y="20" width="160" height="40" rx="6" fill="var(--color-s1-light)" stroke="var(--color-s1)" stroke-width="1.5"/>
@@ -409,8 +450,8 @@ textarea:focus,input[type="text"]:focus{border-color:var(--color-s3);outline:non
       </svg>
     </div>
 
-    <h3 style="margin-top:var(--space-lg);margin-bottom:var(--space-sm)">Step 8: Output delivery</h3>
-    <p class="explain-text" style="margin-bottom:0">The detokenized text is <strong>streamed to your screen token by token</strong> as it is generated — this is why responses often appear word by word in real time. The model doesn't compose the full response and then send it; it sends each piece as soon as it's produced. What you see appearing on screen is the model thinking in real time.</p>
+    <h3 style="margin-top:var(--space-lg);margin-bottom:var(--space-sm)">Streaming the output</h3>
+    <p class="explain-text" style="margin-bottom:0">The text is <strong>streamed to your screen token by token</strong> as it is generated, which is why responses appear a few words at a time. The model doesn't write the full response before sending it. What you see is the output as it is produced.</p>
   </div>
 </section>
 
@@ -447,7 +488,7 @@ const tokenizerStatus = document.getElementById('tokenizer-status');
     const mod = await import('https://esm.sh/js-tiktoken@1.0.12');
     tiktokenEnc = mod.getEncoding('cl100k_base');
     tiktokenReady = true;
-    tokenizerStatus.innerHTML = 'Using <code>cl100k_base</code> encoding (GPT-4/GPT-4o). Results match <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">OpenAI\'s Tokenizer</a>.';
+    tokenizerStatus.innerHTML = 'Using the <code>cl100k_base</code> encoding (GPT-4 and GPT-3.5 Turbo). Newer models use different vocabularies, so their token counts can differ. Compare with <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">OpenAI\'s Tokenizer</a>.';
   } catch(e) {
     console.warn('tiktoken load failed, using basic fallback:', e);
     tokenizerStatus.innerHTML = 'Could not load tiktoken library — showing a simplified approximation. For accurate results, see <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">OpenAI\'s Tokenizer</a>.';
@@ -527,13 +568,13 @@ const embedExamples=[
    clusters:{places:{color:"#326fa8",label:"Places"},countries:{color:"#c43b2e",label:"Countries"},capitals:{color:"#6b4c9a",label:"Capitals"},gov:{color:"#b38600",label:"Governance"},func:{color:"#888",label:"Function Words"}},
    insight:"'Paris', 'France', and 'capital' cluster together — they appear in similar contexts during training. Function words like 'the', 'of', 'is' form their own distant cluster. European capitals form a tight neighbourhood. At this stage, all positions are fixed — the model doesn't yet know these words appear together in this sentence."},
   {text:"ChatGPT uses transformers",
-   sentenceWords:[{word:"Chat",x:200,y:120},{word:"G",x:240,y:100},{word:"PT",x:220,y:80},{word:"uses",x:400,y:230},{word:"transform",x:350,y:140},{word:"ers",x:380,y:160}],
+   sentenceWords:[{word:"Chat",x:200,y:120},{word:"G",x:240,y:100},{word:"PT",x:220,y:80},{word:"uses",x:400,y:230},{word:"transformers",x:365,y:145}],
    relatedWords:[{word:"attention",x:320,y:110,c:"ml"},{word:"neural",x:380,y:120,c:"ml"},{word:"network",x:410,y:140,c:"ml"},{word:"model",x:340,y:170,c:"ml"},{word:"encoder",x:300,y:150,c:"ml"},{word:"decoder",x:330,y:190,c:"ml"},
      {word:"conversation",x:170,y:150,c:"chat"},{word:"message",x:150,y:110,c:"chat"},{word:"bot",x:230,y:140,c:"chat"},{word:"assistant",x:180,y:90,c:"chat"},
      {word:"AI",x:260,y:70,c:"abbr"},{word:"ML",x:280,y:50,c:"abbr"},{word:"NLP",x:300,y:80,c:"abbr"},
      {word:"utilizes",x:420,y:210,c:"verbs"},{word:"employs",x:380,y:250,c:"verbs"}],
    clusters:{ml:{color:"#c43b2e",label:"ML Architecture"},chat:{color:"#326fa8",label:"Conversation"},abbr:{color:"#b38600",label:"Tech Abbreviations"},verbs:{color:"#1a8a7d",label:"Action Verbs"}},
-   insight:"Brand names like 'ChatGPT' get split into common pieces. 'Chat' lands near conversation terms, while 'transform' lands near ML architecture concepts — the model captures both semantic domains from a single compound word."},
+   insight:"'ChatGPT' is split into three tokens ('Chat', 'G', 'PT'), while the common word 'transformers' is a single token. 'Chat' lands near conversation terms and 'transformers' near ML concepts. This fixed layout can't tell the ML meaning from the toy robots; separating them is the job of attention in Step 3."},
   {text:"$$$ expensive !!!",
    sentenceWords:[{word:"$$$",x:250,y:110},{word:"expensive",x:350,y:140},{word:"!!!",x:200,y:240}],
    relatedWords:[{word:"$",x:220,y:90,c:"money"},{word:"€",x:280,y:80,c:"money"},{word:"£",x:240,y:130,c:"money"},{word:"$$",x:260,y:120,c:"money"},
@@ -631,34 +672,41 @@ renderEmbed();
    STEP 3: ATTENTION
    ═══════════════════════════════════════════════ */
 const attSent=['The','animal','didn\'t','cross','the','street','because','it','was','too','tired'];
-const attWts={0:[.05,.15,.05,.05,.3,.15,.05,.05,.05,.05,.05],1:[.2,.1,.05,.05,.05,.1,.05,.15,.1,.05,.1],2:[.05,.1,.05,.3,.05,.1,.05,.1,.1,.05,.05],3:[.05,.1,.1,.05,.1,.35,.05,.05,.05,.05,.05],4:[.15,.05,.05,.05,.05,.35,.05,.05,.1,.05,.05],5:[.05,.1,.05,.25,.2,.05,.05,.1,.05,.05,.05],6:[.05,.1,.05,.15,.05,.15,.05,.2,.1,.05,.05],7:[.05,.55,.05,.03,.02,.03,.07,.03,.07,.03,.07],8:[.05,.15,.1,.05,.05,.05,.05,.25,.05,.1,.1],9:[.05,.05,.05,.05,.05,.05,.05,.1,.15,.05,.4],10:[.05,.3,.05,.05,.05,.05,.05,.15,.1,.1,.05]};
+// Causal (masked) attention: row i holds weights over positions 0..i only, including itself. Each row sums to 1.
+const attWts={0:[1],1:[.4,.6],2:[.1,.55,.35],3:[.05,.35,.35,.25],4:[.2,.1,.05,.4,.25],5:[.03,.07,.05,.45,.25,.15],6:[.03,.12,.25,.3,.05,.1,.15],7:[.03,.55,.05,.07,.02,.13,.1,.05],8:[.02,.1,.03,.03,.02,.05,.1,.5,.15],9:[.02,.05,.03,.03,.02,.05,.1,.1,.4,.2],10:[.02,.35,.03,.05,.02,.05,.05,.2,.1,.08,.05]};
 
 const attWdsEl=document.getElementById('attention-words'),attSvg=document.getElementById('attention-svg'),attInfo=document.getElementById('attention-info');
 attSent.forEach((w,i)=>{const s=document.createElement('span');s.className='attention-word';s.textContent=w;s.dataset.index=i;s.setAttribute('tabindex','0');s.setAttribute('role','button');s.setAttribute('aria-label',`Word: ${w}`);attWdsEl.appendChild(s)});
 const attWds=attWdsEl.querySelectorAll('.attention-word');
 
+function resetAtt(){attSvg.innerHTML='';attWds.forEach(w=>{w.setAttribute('aria-selected','false');w.style.background='';w.classList.remove('masked')})}
 function showAtt(si){
-  attSvg.innerHTML='';attWds.forEach(w=>{w.setAttribute('aria-selected','false');w.style.background=''});
+  resetAtt();
   attWds[si].setAttribute('aria-selected','true');
-  const wts=attWts[si],sr=attWds[si].getBoundingClientRect(),cr=document.getElementById('attention-container').getBoundingClientRect();
-  const sx=sr.left+sr.width/2-cr.left,sy=sr.bottom-cr.top+4;
-  wts.forEach((w,ti)=>{if(ti===si)return;const tr=attWds[ti].getBoundingClientRect(),tx=tr.left+tr.width/2-cr.left,ty=tr.bottom-cr.top+4;
-    const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',`M ${sx} ${sy} C ${sx} ${sy+35}, ${tx} ${sy+35}, ${tx} ${ty}`);p.classList.add('attention-line');p.setAttribute('stroke-width',Math.max(1,w*8));p.setAttribute('opacity',Math.max(0.08,w));attSvg.appendChild(p);
+  attWds.forEach((w,ti)=>{if(ti>si)w.classList.add('masked')});
+  // Measure relative to the SVG itself (it sits below the sentence), so arcs start at its top edge
+  const wts=attWts[si],sr=attWds[si].getBoundingClientRect(),cr=attSvg.getBoundingClientRect();
+  const sx=sr.left+sr.width/2-cr.left,sy=2;
+  wts.forEach((w,ti)=>{if(ti===si)return;const tr=attWds[ti].getBoundingClientRect(),tx=tr.left+tr.width/2-cr.left,ty=2;
+    const depth=Math.min(cr.height-6,18+Math.abs(sx-tx)*0.22);
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',`M ${sx} ${sy} C ${sx} ${sy+depth}, ${tx} ${sy+depth}, ${tx} ${ty}`);p.classList.add('attention-line');p.setAttribute('stroke-width',Math.max(1,w*8));p.setAttribute('opacity',Math.max(0.08,w));attSvg.appendChild(p);
     if(w>0.15)attWds[ti].style.background=`rgba(45,106,159,${Math.min(w*1.5,0.3)})`});
+  if(si===0){attInfo.textContent=`"${attSent[0]}" is the first token, so it can only attend to itself. Every later word is masked.`;return}
   const tops=wts.map((w,i)=>({word:attSent[i],w,i})).filter(t=>t.i!==si).sort((a,b)=>b.w-a.w).slice(0,3);
-  attInfo.textContent=`"${attSent[si]}" attends most strongly to: ${tops.map(t=>`"${t.word}" (${(t.w*100).toFixed(0)}%)`).join(', ')}`;
+  const later=attSent.length-1-si;
+  attInfo.textContent=`"${attSent[si]}" attends most strongly to: ${tops.map(t=>`"${t.word}" (${(t.w*100).toFixed(0)}%)`).join(', ')}, plus ${(wts[si]*100).toFixed(0)}% to itself.${later>0?` The ${later} later word${later>1?'s are':' is'} masked.`:''}`;
 }
-function clearAtt(){attSvg.innerHTML='';attWds.forEach(w=>{w.setAttribute('aria-selected','false');w.style.background=''});attInfo.textContent='Select a word above to see its attention pattern.'}
+function clearAtt(){resetAtt();attInfo.textContent='Select a word above to see its attention pattern.'}
 attWds.forEach((w,i)=>{w.addEventListener('mouseenter',()=>showAtt(i));w.addEventListener('focus',()=>showAtt(i));w.addEventListener('click',()=>showAtt(i));
   w.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showAtt(i)}if(e.key==='ArrowRight'&&i<attWds.length-1)attWds[i+1].focus();if(e.key==='ArrowLeft'&&i>0)attWds[i-1].focus()})});
 attWdsEl.addEventListener('mouseleave',clearAtt);
 
 /* Bridge diagram */
 const bSvg=document.getElementById('bridge-svg'),bExp=document.getElementById('bridge-explanation');
-const bWords=[{word:'she',c:'func',color:'#7a756e'},{word:'sat',c:'func',color:'#7a756e'},{word:'river',c:'nature',color:'#2a8a7a'},{word:'bank₁',c:'ambig',color:'#c05d3b'},{word:'checked',c:'func',color:'#7a756e'},{word:'her',c:'func',color:'#7a756e'},{word:'bank₂',c:'ambig',color:'#c05d3b'},{word:'account',c:'finance',color:'#c07d35'}];
+const bWords=[{word:'she',c:'func',color:'#7a756e'},{word:'sat',c:'func',color:'#7a756e'},{word:'river',c:'nature',color:'#2a8a7a'},{word:'bank₁',c:'ambig',color:'#c05d3b'},{word:'then',c:'func',color:'#7a756e'},{word:'deposited',c:'finance',color:'#c07d35'},{word:'cash',c:'finance',color:'#c07d35'},{word:'bank₂',c:'ambig',color:'#c05d3b'}];
 const anchors=[{w:'water',x:120,y:55,c:'#2a8a7a'},{w:'stream',x:80,y:90,c:'#2a8a7a'},{w:'shore',x:160,y:85,c:'#2a8a7a'},{w:'money',x:560,y:55,c:'#c07d35'},{w:'finance',x:600,y:90,c:'#c07d35'},{w:'savings',x:520,y:85,c:'#c07d35'}];
-const lPos=[[[260,175],[290,210],[180,130],[350,155],[410,195],[440,165],[350,155],[490,135]],[[250,185],[280,220],[170,125],[320,145],[420,200],[445,170],[380,150],[500,125]],[[240,195],[270,225],[155,110],[260,120],[430,205],[455,175],[430,130],[520,110]],[[230,205],[260,230],[140,95],[195,95],[445,210],[465,185],[490,95],[550,85]],[[220,215],[250,235],[130,80],[150,70],[460,215],[475,195],[560,70],[580,65]]];
-const lExps=['<strong>Input embeddings:</strong> Both "bank" tokens start at the exact same position — the model hasn\'t processed any context yet.','<strong>Layer 1:</strong> Vectors begin to shift. "bank₁" drifts toward "river"; "bank₂" inches toward "account."','<strong>Layer 2:</strong> Separation is clearer. Each "bank" is pulled more strongly toward its contextual neighbors.','<strong>Layer 6:</strong> Two clearly different regions. "bank₁" sits near nature/water; "bank₂" has moved toward finance.','<strong>Layer 12 (final):</strong> Full disambiguation. Identical starting vectors now occupy completely different positions. Context has reshaped meaning.'];
+const lPos=[[[260,175],[290,210],[180,130],[350,155],[400,215],[440,180],[480,135],[350,155]],[[250,185],[280,220],[170,125],[320,145],[405,225],[455,175],[495,130],[380,150]],[[240,195],[270,225],[155,110],[260,120],[410,235],[470,170],[510,125],[430,130]],[[230,205],[260,230],[140,95],[195,95],[415,245],[480,165],[525,120],[490,95]],[[220,215],[250,235],[130,80],[150,70],[420,255],[490,160],[540,115],[555,65]]];
+const lExps=['<strong>Input embeddings:</strong> Both "bank" tokens start from the same embedding. No context has been processed yet.','<strong>Layer 1:</strong> Vectors begin to shift. "bank₁" drifts toward "river"; "bank₂" begins moving toward "deposited" and "cash."','<strong>Layer 2:</strong> Separation is clearer. Each "bank" is pulled more strongly toward the earlier words that give it meaning.','<strong>Layer 6:</strong> Two clearly different regions. "bank₁" sits near nature and water; "bank₂" has moved toward finance.','<strong>Layer 12 (last layer in this illustration):</strong> Identical starting vectors now occupy different positions. Context has reshaped meaning. Production models use more layers, often several dozen.'];
 
 function initBridge(){
   for(let x=0;x<=700;x+=50){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',x);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',340);l.setAttribute('stroke','#e8e5df');l.setAttribute('stroke-width','0.5');bSvg.appendChild(l)}
@@ -690,7 +738,7 @@ initBridge();setLayer(0);
 /* ═══════════════════════════════════════════════
    CONSTRAINT: CONTEXT WINDOW
    ═══════════════════════════════════════════════ */
-const sampleText=`Large language models have transformed how we interact with computers. These systems, built on the transformer architecture, process text by converting it into numerical representations called tokens. Each token passes through multiple layers of attention mechanisms and feed-forward networks, gradually building a rich understanding of meaning and context.\n\nThe training process involves exposing the model to vast amounts of text data from books, websites, articles, and other sources. Through this exposure, the model learns patterns in language — grammar, facts, reasoning patterns, and even stylistic conventions. The model does not memorize text verbatim but instead learns statistical patterns that allow it to generate coherent, contextually appropriate responses.\n\nOne crucial limitation is the context window. Every model has a maximum number of tokens it can process at once. Early models like GPT-2 had context windows of just 1,024 tokens — roughly 750 words. Modern models have expanded dramatically: GPT-4 supports 128,000 tokens, and some models push beyond one million. Despite these advances, the context window remains a fundamental constraint.\n\nWhen a conversation or document exceeds the context window, the model simply cannot see the earlier portions. This creates challenges for long documents, extended conversations, and complex reasoning tasks. Strategies like retrieval-augmented generation (RAG), summarization chains, and sliding window approaches help mitigate this limitation.\n\nUnderstanding these constraints is essential for anyone building applications with large language models.`;
+const sampleText=`Large language models have transformed how we interact with computers. These systems, built on the transformer architecture, process text by converting it into numerical representations called tokens. Each token passes through multiple layers of attention mechanisms and feed-forward networks, gradually building a rich understanding of meaning and context.\n\nThe training process involves exposing the model to vast amounts of text data from books, websites, articles, and other sources. Through this exposure, the model learns patterns in language — grammar, facts, reasoning patterns, and even stylistic conventions. The model does not memorize text verbatim but instead learns statistical patterns that allow it to generate coherent, contextually appropriate responses.\n\nOne crucial limitation is the context window. Every model has a maximum number of tokens it can process at once. Early models like GPT-2 had context windows of just 1,024 tokens — roughly 750 words. Modern models have expanded dramatically: GPT-4 Turbo supports 128,000 tokens, and some models push beyond one million. Despite these advances, the context window remains a fundamental constraint.\n\nWhen a conversation or document exceeds the context window, the model simply cannot see the earlier portions. This creates challenges for long documents, extended conversations, and complex reasoning tasks. Strategies like retrieval-augmented generation (RAG), summarization chains, and sliding window approaches help mitigate this limitation.\n\nUnderstanding these constraints is essential for anyone building applications with large language models.`;
 
 const ctxWords=sampleText.split(/(\s+)/),ctxTokens=ctxWords.filter(w=>/\S/.test(w));
 const ctxTextEl=document.getElementById('context-text'),ctxStats=document.getElementById('context-stats'),ctxExp=document.getElementById('context-explanation');
@@ -711,7 +759,7 @@ document.querySelectorAll('.window-size-btn').forEach(b=>b.addEventListener('cli
 renderCtx();
 
 /* ═══════════════════════════════════════════════
-   STEP 6: SAMPLING
+   STEP 5: SAMPLING
    ═══════════════════════════════════════════════ */
 const baseLogits={mat:4.2,floor:3.5,roof:2.1,table:1.8,bed:1.5,couch:1.0,fence:0.6,moon:-0.5,idea:-1.5,blockchain:-3.0};
 const tN=Object.keys(baseLogits),lV=Object.values(baseLogits);
@@ -743,7 +791,7 @@ function renderProb(){
   if(sampIdx>=0){sampleHelp.textContent=`Sampled: "${tN[sampIdx]}" — the model would append this token and repeat the loop. Click again to re-sample, or clear.`}
   else{sampleHelp.textContent='Click to randomly pick one token from the distribution below — weighted by probability, just like the model does.'}
 
-  tExp.textContent=temp<0.5?'Very low temperature — almost always picks the top choice. Predictable but repetitive.':temp<1?'Below-default — distribution sharpened. Leans toward likely tokens with some variety.':temp==1?'Default temperature (1.0) — the raw probability distribution, unmodified.':temp<1.5?'Above-default — distribution flattened. Less likely tokens get a bigger chance.':'Very high temperature — nearly uniform. Picks almost randomly, often incoherent.';
+  tExp.textContent=temp<0.5?'Very low temperature: almost always picks the top choice. Predictable but repetitive. At 0 this becomes greedy decoding.':temp<1?'Below-default — distribution sharpened. Leans toward likely tokens with some variety.':temp==1?'Default temperature (1.0) — the raw probability distribution, unmodified.':temp<1.5?'Above-default — distribution flattened. Less likely tokens get a bigger chance.':'Very high temperature — nearly uniform. Picks almost randomly, often incoherent.';
 }
 sampleBtn.addEventListener('click',()=>{
   const temp=parseFloat(tS.value),tk=parseInt(kS.value),tp=parseFloat(pS.value);
